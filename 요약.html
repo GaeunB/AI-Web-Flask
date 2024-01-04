@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      .main-container {
+        display: flex;
+        justify-content: space-around;
+        width: 80%;
+        margin: 20px auto;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .box {
+        flex: 1;
+        padding: 20px;
+        margin: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+      }
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+        background-color: #297958;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+      }
+      #outputText {
+        margin-top: 10px;
+      }
+    </style>
+    <title>자기소개서 요약페이지</title>
+  </head>
+
+  <body>
+    <h1>요약 페이지</h1>
+
+    <div class="main-container">
+      <div class="box">
+        <h2>자기소개서 입력란</h2>
+        <textarea
+          id="inputText"
+          rows="8"
+          placeholder="자기소개서를 입력하세요"
+        ></textarea>
+        <button onclick="summarize()">요약하기</button>
+      </div>
+
+      <div class="box">
+        <h2>요약 결과</h2>
+        <p id="outputText"></p>
+      </div>
+    </div>
+
+    <script>
+      function summarize() {
+        var inputText = $("#inputText").val();
+        // 여기에서 요약 알고리즘을 적용하거나 API를 호출하여 요약 결과를 가져온다.
+        var summarizedText = inputText;
+        $("#outputText").text(summarizedText);
+
+        // Flask 서버에 POST 요청 보내기 예시
+        $.ajax({
+          url: "http://localhost:5000/summarize", // Flask 서버 주소
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ text: inputText }), // 요약할 텍스트를 전송
+          success: function (response) {
+            // 서버 응답 성공 시 결과를 출력0란에 표시
+            $("#outputText").text(response.summary);
+          },
+          error: function (error) {
+            console.error("서버와의 통신 중 에러:", error);
+            $("#outputText").text("요약 중 오류가 발생했습니다.");
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
